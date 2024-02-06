@@ -26,7 +26,7 @@ export class FormGroup {
      * @param {boolean} fieldArgs.isRequired - Indicates if the field is mandatory.
      * @returns {Object} - The updated FormGroup.
      */
-    addField(fieldArgs : {accessor : string, defaultValue : string, isRequired : boolean, validationFn : (value: string) => boolean | undefined | ((value: string) => boolean)[]}){
+    addField(fieldArgs : {accessor : string, defaultValue : string, isRequired : boolean, validationFns : (value: string) => boolean | undefined | ((value: string) => boolean)[]}){
         // return this to keep chaining possible if this one field can't be added
         if (fieldArgs == null) return this
         this.#state = {...this.#state, 
@@ -35,7 +35,8 @@ export class FormGroup {
                 accessor : fieldArgs.accessor,
                 value : fieldArgs.defaultValue || '', 
                 error : false, 
-                validationFn : fieldArgs.validationFn || (() => true),
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                validationFn : Array.isArray(fieldArgs.validationFns) ? fieldArgs.validationFns : [fieldArgs.validationFns] || [((_value: string) => true)],
                 isRequired : fieldArgs.isRequired,
             }}
         return this
