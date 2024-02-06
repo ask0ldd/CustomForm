@@ -22,13 +22,18 @@ export class FormGroup {
      * @param {Object} fieldArgs - The arguments to create a new field.
      * @param {string} fieldArgs.accessor - The id to access a target FormGroup field.
      * @param {string} fieldArgs.defaultValue - The default value for the field (optional).
-     * @param {(value: string) => boolean} fieldArgs.validationFn - The validation function for the new field (optional).
+     * @param {ValidatorFn | ValidatorFns | undefined} fieldArgs.validationFn - The validation function for the new field (optional).
      * @param {boolean} fieldArgs.isRequired - Indicates if the field is mandatory.
      * @returns {Object} - The updated FormGroup.
      */
     addField(fieldArgs : {accessor : string, defaultValue : string, isRequired : boolean, validationFns : ValidatorFn | ValidatorFns | undefined}){
         // return this to keep chaining possible if this one field can't be added
         if (fieldArgs == null) return this
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        let _validationsFns = [((_value: string) => true)]
+        if(fieldArgs.validationFns != null) {
+            _validationsFns = Array.isArray(fieldArgs.validationFns) ? fieldArgs.validationFns : [fieldArgs.validationFns]
+        }
         // chain if accessor not "" and not already existant
         this.#state = {...this.#state, 
             [fieldArgs.accessor] : {
@@ -36,14 +41,13 @@ export class FormGroup {
                 accessor : fieldArgs.accessor,
                 value : fieldArgs.defaultValue || '', 
                 error : false, 
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                validationFns : Array.isArray(fieldArgs.validationFns) ? fieldArgs.validationFns : [fieldArgs.validationFns] || [((_value: string) => true)],
+                validationFns : _validationsFns,
                 isRequired : fieldArgs.isRequired,
         }}
         return this
     }
 
-    updateField(fieldAccessor: string, value : string){
+    updateFieldValue(fieldAccessor: string, value : string){
         const field = this.#state[fieldAccessor]
         this.#state = {...this.#state, 
             [fieldAccessor] : {
@@ -67,11 +71,11 @@ export class FormGroup {
     }
 }
 
-export interface IFormGroup{
+interface IFormGroup{
     [key: string]: IField
   }
   
-  interface IField{
+interface IField{
     accessor : string
     defaultValue : string
     validationFns : ValidatorFns | ValidatorFn
@@ -80,5 +84,5 @@ export interface IFormGroup{
     value : string
   }
 
-  type ValidatorFn = (value: string) => boolean
-  type ValidatorFns = ValidatorFn[]
+type ValidatorFn = (value: string) => boolean
+type ValidatorFns = ValidatorFn[]

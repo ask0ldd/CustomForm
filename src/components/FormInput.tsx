@@ -1,5 +1,3 @@
-
-
 export default function FormInput({input, label, formGroupState, errorMessage} : IProps) {
 
   const labelId = label.id
