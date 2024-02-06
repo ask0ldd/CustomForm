@@ -3,7 +3,7 @@
  */
 export class FormGroup {
 
-    #state = {}
+    #state : IFormGroup = {}
 
     /**
      * Constructs a new FormGroup.
@@ -26,9 +26,10 @@ export class FormGroup {
      * @param {boolean} fieldArgs.isRequired - Indicates if the field is mandatory.
      * @returns {Object} - The updated FormGroup.
      */
-    addField(fieldArgs : {accessor : string, defaultValue : string, isRequired : boolean, validationFns : (value: string) => boolean | undefined | ((value: string) => boolean)[]}){
+    addField(fieldArgs : {accessor : string, defaultValue : string, isRequired : boolean, validationFns : ValidatorFn | ValidatorFns | undefined}){
         // return this to keep chaining possible if this one field can't be added
         if (fieldArgs == null) return this
+        // chain if accessor not "" and not already existant
         this.#state = {...this.#state, 
             [fieldArgs.accessor] : {
                 defaultValue : fieldArgs.defaultValue,
@@ -36,10 +37,24 @@ export class FormGroup {
                 value : fieldArgs.defaultValue || '', 
                 error : false, 
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                validationFn : Array.isArray(fieldArgs.validationFns) ? fieldArgs.validationFns : [fieldArgs.validationFns] || [((_value: string) => true)],
+                validationFns : Array.isArray(fieldArgs.validationFns) ? fieldArgs.validationFns : [fieldArgs.validationFns] || [((_value: string) => true)],
                 isRequired : fieldArgs.isRequired,
-            }}
+        }}
         return this
+    }
+
+    updateField(fieldAccessor: string, value : string){
+        const field = this.#state[fieldAccessor]
+        this.#state = {...this.#state, 
+            [fieldAccessor] : {
+                defaultValue : field.defaultValue,
+                accessor : field.accessor,
+                value : value || '', 
+                error : field.error, 
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                validationFns : Array.isArray(field.validationFns) ? field.validationFns : [field.validationFns] || [((_value: string) => true)],
+                isRequired : field.isRequired,
+        }}
     }
 
     /**
@@ -51,3 +66,19 @@ export class FormGroup {
         return this.#state
     }
 }
+
+export interface IFormGroup{
+    [key: string]: IField
+  }
+  
+  interface IField{
+    accessor : string
+    defaultValue : string
+    validationFns : ValidatorFns | ValidatorFn
+    isRequired : boolean
+    error : boolean
+    value : string
+  }
+
+  type ValidatorFn = (value: string) => boolean
+  type ValidatorFns = ValidatorFn[]
