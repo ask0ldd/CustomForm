@@ -1,3 +1,6 @@
+import { ValidatorFn, ValidatorFns } from "../types/validatorsTypes"
+import FormControl from "./InputControl"
+
 /**
  * Represents a form group.
  */
@@ -26,7 +29,7 @@ export class FormGroup {
      * @param {boolean} fieldArgs.isRequired - Indicates if the field is mandatory.
      * @returns {Object} - The updated FormGroup.
      */
-    addField(fieldArgs : {accessor : string, defaultValue : string, isRequired : boolean, validationFns : ValidatorFn | ValidatorFns | undefined}){
+    /*addField(fieldArgs : {accessor : string, defaultValue : string, isRequired : boolean, validationFns : ValidatorFn | ValidatorFns | undefined}){
         // return this to keep chaining possible if this one field can't be added
         if (fieldArgs == null) return this
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -45,23 +48,34 @@ export class FormGroup {
                 isRequired : fieldArgs.isRequired,
         }}
         return this
+    }*/
+
+    addField(fieldArgs : {accessor : string, defaultValue : string, isRequired : boolean, validationFns : ValidatorFn | ValidatorFns | undefined}){
+        if (fieldArgs == null) return this
+        this.#state = {...this.#state,
+            [fieldArgs.accessor] : new FormControl(fieldArgs)
+        }
     }
 
-    updateFieldValue(fieldAccessor: string, value : string){
+    get(accessor : string) : FormControl{
+        return this.#state[accessor]
+    }
+
+    /*updateFieldValue(fieldAccessor: string, value : string){
         const field = this.#state[fieldAccessor]
         this.#state = {...this.#state, 
             [fieldAccessor] : {
                 defaultValue : field.defaultValue,
                 accessor : field.accessor,
                 value : value || '', 
-                error : field.error, 
+                errors : [], 
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 validationFns : Array.isArray(field.validationFns) ? field.validationFns : [field.validationFns] || [((_value: string) => true)],
                 isRequired : field.isRequired,
         }}
-    }
+    }*/
 
-    #fullValidation(){
+    /*#fullValidation(){
         const requiredButMissing = []
         for (const [key, field] of Object.entries(this.#state)) {
             if(field.value === "" && field.isRequired) {
@@ -78,6 +92,10 @@ export class FormGroup {
                 }
             })
         }
+    }*/
+
+    validation(){
+
     }
 
     /**
@@ -90,9 +108,9 @@ export class FormGroup {
     }
 }
 
-interface IFormGroup{
+/*interface IFormGroup{
     [key: string]: IField
-  }
+}
   
 interface IField{
     accessor : string
@@ -101,4 +119,8 @@ interface IField{
     isRequired : boolean
     error : boolean
     value : string
-  }
+}*/
+
+interface IFormGroup{
+    [key: string]: FormControl
+}

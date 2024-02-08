@@ -1,16 +1,15 @@
-export default function FormInput({input, label, formGroupState, errorMessage} : IProps) {
+import FormControl from "./InputControl"
+
+export default function FormInput({input, label, formControl, errorMessage} : IProps) {
 
   const labelId = label.id
-  const fieldAccessor = formGroupState.fieldAccessor
-
-  if(fieldAccessor == null) return (<></>)
 
   return (
     <>
       {label.text && <label id={labelId} htmlFor={input.id} className={label?.CSSClasses?.join(' ')}>{label.text}</label>}
-      <input aria-labelledby={labelId} type={input.type} id={input.id} placeholder={input?.placeholder} className={input?.CSSClasses?.join(' ')} value={/*input?.value || */formGroupState.get()[fieldAccessor].value}
-      onChange={(e) => formGroupState.set(updateFormGroupField(fieldAccessor, formGroupState.get(), e.target.value))}/>
-      {(formGroupState.get()[fieldAccessor]?.error && errorMessage) && <p className="errorMessage" id={input.id+"-error"}>{errorMessage}</p>}
+      <input aria-labelledby={labelId} type={input.type} id={input.id} placeholder={input?.placeholder} className={input?.CSSClasses?.join(' ')} value={formControl.value}
+      onChange={(e) => formControl.value = e.target.value}/>
+      {(formControl.errors.length > 0) && <p className="errorMessage" id={input.id+"-error"}>{errorMessage}</p>}
     </>
   )
 }
@@ -18,11 +17,7 @@ export default function FormInput({input, label, formGroupState, errorMessage} :
 interface IProps{
   input : IInput
   label : ILabel
-  formGroupState : { 
-      get() : IFormGroup
-      set : (state : IFormGroup) => void
-      fieldAccessor? : string
-  }
+  formControl : FormControl
   errorMessage : string
 }
 
