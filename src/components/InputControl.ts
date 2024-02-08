@@ -1,6 +1,6 @@
 import { ValidatorFn, ValidatorFns } from "../types/validatorsTypes";
 
-export default class FormControl{
+export default class InputControl{
 
     defaultValue : string = ""
     accessor : string = ""
@@ -11,6 +11,7 @@ export default class FormControl{
     isRequired : boolean = false
 
     constructor(fieldArgs : {accessor : string, defaultValue : string, isRequired : boolean, validationFns : ValidatorFn | ValidatorFns | undefined}){
+        if(fieldArgs.validationFns) console.log(fieldArgs.validationFns.toString())
         if (fieldArgs == null) return
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         let _validationsFns = [((_value: string) => true)]

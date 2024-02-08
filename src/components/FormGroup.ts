@@ -1,5 +1,5 @@
 import { ValidatorFn, ValidatorFns } from "../types/validatorsTypes"
-import FormControl from "./InputControl"
+import InputControl from "./InputControl"
 
 /**
  * Represents a form group.
@@ -53,46 +53,13 @@ export class FormGroup {
     addField(fieldArgs : {accessor : string, defaultValue : string, isRequired : boolean, validationFns : ValidatorFn | ValidatorFns | undefined}){
         if (fieldArgs == null) return this
         this.#state = {...this.#state,
-            [fieldArgs.accessor] : new FormControl(fieldArgs)
+            [fieldArgs.accessor] : new InputControl(fieldArgs)
         }
     }
 
-    get(accessor : string) : FormControl{
+    get(accessor : string) : InputControl{
         return this.#state[accessor]
     }
-
-    /*updateFieldValue(fieldAccessor: string, value : string){
-        const field = this.#state[fieldAccessor]
-        this.#state = {...this.#state, 
-            [fieldAccessor] : {
-                defaultValue : field.defaultValue,
-                accessor : field.accessor,
-                value : value || '', 
-                errors : [], 
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                validationFns : Array.isArray(field.validationFns) ? field.validationFns : [field.validationFns] || [((_value: string) => true)],
-                isRequired : field.isRequired,
-        }}
-    }*/
-
-    /*#fullValidation(){
-        const requiredButMissing = []
-        for (const [key, field] of Object.entries(this.#state)) {
-            if(field.value === "" && field.isRequired) {
-                field.error = true
-                requiredButMissing.push(key)
-            }
-        }
-
-        const validationFnsfailed = new Set()
-        for (const [key, field] of Object.entries(this.#state)) {
-            field.validationFns.forEach(validationFn => {
-                if(!validationFn(field.value)) {
-                    validationFnsfailed.add(key)
-                }
-            })
-        }
-    }*/
 
     validation(){
 
@@ -108,19 +75,6 @@ export class FormGroup {
     }
 }
 
-/*interface IFormGroup{
-    [key: string]: IField
-}
-  
-interface IField{
-    accessor : string
-    defaultValue : string
-    validationFns : ValidatorFns
-    isRequired : boolean
-    error : boolean
-    value : string
-}*/
-
 interface IFormGroup{
-    [key: string]: FormControl
+    [key: string]: InputControl
 }
