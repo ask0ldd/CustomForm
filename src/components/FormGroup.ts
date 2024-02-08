@@ -34,7 +34,7 @@ export class FormGroup {
         if(fieldArgs.validationFns != null) {
             _validationsFns = Array.isArray(fieldArgs.validationFns) ? fieldArgs.validationFns : [fieldArgs.validationFns]
         }
-        // chain if accessor not "" and not already existant
+        // check if accessor not "" and not already existant
         this.#state = {...this.#state, 
             [fieldArgs.accessor] : {
                 defaultValue : fieldArgs.defaultValue,
@@ -61,6 +61,25 @@ export class FormGroup {
         }}
     }
 
+    #fullValidation(){
+        const requiredButMissing = []
+        for (const [key, field] of Object.entries(this.#state)) {
+            if(field.value === "" && field.isRequired) {
+                field.error = true
+                requiredButMissing.push(key)
+            }
+        }
+
+        const validationFnsfailed = new Set()
+        for (const [key, field] of Object.entries(this.#state)) {
+            field.validationFns.forEach(validationFn => {
+                if(!validationFn(field.value)) {
+                    validationFnsfailed.add(key)
+                }
+            })
+        }
+    }
+
     /**
      * Build the FormGroup.
      * @returns {Object} FormGroup.
@@ -78,7 +97,7 @@ interface IFormGroup{
 interface IField{
     accessor : string
     defaultValue : string
-    validationFns : ValidatorFns | ValidatorFn
+    validationFns : ValidatorFns
     isRequired : boolean
     error : boolean
     value : string
