@@ -102,6 +102,3 @@ interface IField{
     error : boolean
     value : string
   }
-
-type ValidatorFn = (value: string) => boolean
-type ValidatorFns = ValidatorFn[]
