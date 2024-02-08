@@ -1,7 +1,7 @@
 import { useState } from "react"
 import InputControl from "./InputControl"
 
-export default function FormInput({input, label, inputControl, errorMessage} : IProps) {
+export default function FormInput({input, label, inputControl, errorMessages} : IProps) {
 
   const [inputValue, setInputValue] = useState(input.value)
 
@@ -13,7 +13,7 @@ export default function FormInput({input, label, inputControl, errorMessage} : I
         setInputValue(e.target.value)
         inputControl.value = e.target.value
       }}/>
-      {(inputControl.errors.length > 0) && <p className="errorMessage" id={input.id+"-error"}>{errorMessage}</p>}
+      {(inputControl.errors.length > 0) && <p className="errorMessage" id={input.id+"-error"}>{errorMessages[0].message}</p>}
     </>
   )
 }
@@ -22,7 +22,7 @@ interface IProps{
   input : IInput
   label : ILabel
   inputControl : InputControl
-  errorMessage : string
+  errorMessages : {validationFn : string, message :string}[]
 }
 
 interface ILabel{
@@ -35,6 +35,6 @@ interface IInput{
   id : string
   type : "text" | "email" | "password" | "number" | "search" | "tel" | "url"
   placeholder? : string
-  value? : string
+  value : string
   CSSClasses? : string[]
 }

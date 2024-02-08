@@ -5,14 +5,14 @@ import FormInput from './components/FormInput'
 function App() {
 
   const formGroup = new FormGroup()
-  formGroup.addField({accessor : "name", defaultValue : "", isRequired : false, validationFns : [test]})
+  formGroup.addField({accessor : "name", defaultValue : "", isRequired : false, validationFns : [lengthSupTen, lengthInfFifty]}) // define error messages here
 
   return (
     <form onSubmit={(e : React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
       formGroup.validation()
     }}>
-      <FormInput input={{id : "name-label", type : 'text'}} label={{id : "name-label", text : 'name'}} inputControl={formGroup.get("name")} errorMessage={'error'}/>
+      <FormInput input={{id : "name", type : 'text', value : ''}} label={{id : "name-label", text : 'name'}} inputControl={formGroup.get("name")} errorMessages={[{validationFn : 'lengthSupTen', message : 'error'}, {validationFn : 'lengthInfFifty', message : 'error2'}]}/>
       <input type='submit'/>
     </form>
   )
@@ -20,6 +20,10 @@ function App() {
 
 export default App
 
-function test(value : string) : boolean{
+function lengthSupTen(value : string) : boolean{
   return value.length > 10
+}
+
+function lengthInfFifty(value : string) : boolean{
+  return value.length < 50
 }
