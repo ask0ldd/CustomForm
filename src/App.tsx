@@ -5,7 +5,7 @@ import FormInput from './components/FormInput'
 function App() {
 
   const formGroup = new FormGroup()
-  formGroup.addField({accessor : "name", defaultValue : "", isRequired : false, validationFns : test})
+  formGroup.addField({accessor : "name", defaultValue : "", isRequired : false, validationFns : [test]})
 
   return (
     <form>

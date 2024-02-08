@@ -1,6 +1,6 @@
 import { ValidatorFn, ValidatorFns } from "../types/validatorsTypes";
 
-export default class InputControl{
+class InputControl{
 
     defaultValue : string = ""
     accessor : string = ""
@@ -11,10 +11,10 @@ export default class InputControl{
     isRequired : boolean = false
 
     constructor(fieldArgs : {accessor : string, defaultValue : string, isRequired : boolean, validationFns : ValidatorFn | ValidatorFns | undefined}){
-        if(fieldArgs.validationFns) console.log(fieldArgs.validationFns.toString())
+        // if(fieldArgs.validationFns && fieldArgs.validationFns.length > 0) console.log(this.#getValidatorId((fieldArgs.validationFns as ValidatorFns)[0]))
         if (fieldArgs == null) return
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        let _validationsFns = [((_value: string) => true)]
+        let _validationsFns : ValidatorFns = [/*((_value: string) => true)*/]
         if(fieldArgs.validationFns != null) {
             _validationsFns = Array.isArray(fieldArgs.validationFns) ? fieldArgs.validationFns : [fieldArgs.validationFns]
         }
@@ -29,12 +29,18 @@ export default class InputControl{
 
     validate(){
         if(this.validationFns == null) return true
+        this.errors = []
         this.validationFns.forEach(validationFn => {
             if(!validationFn(this.value)) {
                 // validationFnsfailed.add(key)
-                console.log(validationFn.prototype)
+                this.errors.push(this.#getValidationFnName(validationFn))
             }
         })
     }
 
+    #getValidationFnName(validationFn : ValidatorFn){
+        return validationFn.prototype.constructor.name
+    }
 }
+
+export default InputControl

@@ -34,16 +34,3 @@ interface IInput{
   value? : string
   CSSClasses? : string[]
 }
-
-export interface IFormGroup{
-  [key: string]: IField
-}
-
-interface IField{
-  accessor : string
-  defaultValue : string
-  validationFns : ((value: string) => boolean)[]
-  isMandatory : boolean
-  error : boolean
-  value : string
-}
