@@ -5,7 +5,6 @@ class InputControl{
     defaultValue : string = ""
     accessor : string = ""
     value : string = ""
-    // error : boolean = false // to update
     errors : string[] = []
     validationFns : ValidatorFns | undefined = undefined
     isRequired : boolean = false
@@ -36,6 +35,8 @@ class InputControl{
                 this.errors.push(this.#getValidationFnName(validationFn))
             }
         })
+
+        console.log(this.errors)
     }
 
     #getValidationFnName(validationFn : ValidatorFn){

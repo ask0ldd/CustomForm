@@ -8,14 +8,18 @@ function App() {
   formGroup.addField({accessor : "name", defaultValue : "", isRequired : false, validationFns : [test]})
 
   return (
-    <form>
-      <FormInput input={{id : "name-label", type : 'text'}} label={{id : "name-label", text : 'name'}} formControl={formGroup.get("name")} errorMessage={''}/>
+    <form onSubmit={(e : React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      formGroup.validation()
+    }}>
+      <FormInput input={{id : "name-label", type : 'text'}} label={{id : "name-label", text : 'name'}} inputControl={formGroup.get("name")} errorMessage={'error'}/>
+      <input type='submit'/>
     </form>
   )
 }
 
 export default App
 
-function test(){
-  return true
+function test(value : string) : boolean{
+  return value.length > 10
 }

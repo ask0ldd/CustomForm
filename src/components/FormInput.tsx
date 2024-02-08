@@ -1,15 +1,19 @@
-import FormControl from "./InputControl"
+import { useState } from "react"
+import InputControl from "./InputControl"
 
-export default function FormInput({input, label, formControl, errorMessage} : IProps) {
+export default function FormInput({input, label, inputControl, errorMessage} : IProps) {
 
-  const labelId = label.id
+  const [inputValue, setInputValue] = useState(input.value)
 
   return (
     <>
-      {label.text && <label id={labelId} htmlFor={input.id} className={label?.CSSClasses?.join(' ')}>{label.text}</label>}
-      <input aria-labelledby={labelId} type={input.type} id={input.id} placeholder={input?.placeholder} className={input?.CSSClasses?.join(' ')} value={formControl.value}
-      onChange={(e) => formControl.value = e.target.value}/>
-      {(formControl.errors.length > 0) && <p className="errorMessage" id={input.id+"-error"}>{errorMessage}</p>}
+      {label.text && <label id={label.id} htmlFor={input.id} className={label?.CSSClasses?.join(' ')}>{label.text}</label>}
+      <input aria-labelledby={label.id} type={input.type} id={input.id} placeholder={input?.placeholder} className={input?.CSSClasses?.join(' ')} value={inputValue}
+      onChange={(e) => {
+        setInputValue(e.target.value)
+        inputControl.value = e.target.value
+      }}/>
+      {(inputControl.errors.length > 0) && <p className="errorMessage" id={input.id+"-error"}>{errorMessage}</p>}
     </>
   )
 }
@@ -17,7 +21,7 @@ export default function FormInput({input, label, formControl, errorMessage} : IP
 interface IProps{
   input : IInput
   label : ILabel
-  formControl : FormControl
+  inputControl : InputControl
   errorMessage : string
 }
 

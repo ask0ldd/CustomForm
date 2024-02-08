@@ -62,7 +62,10 @@ export class FormGroup {
     }
 
     validation(){
-
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        for (const [key, field] of Object.entries(this.#state)) {
+            field.validate()
+        }
     }
 
     /**
