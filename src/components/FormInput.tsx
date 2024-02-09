@@ -40,7 +40,7 @@ interface ILabel{
 
 interface IInput{
   id : string
-  type : "text" | "email" | "password" | "number" | "search" | "tel" | "url"
+  type : React.HTMLInputTypeAttribute
   placeholder? : string
   value : string
   CSSClasses? : string[]
