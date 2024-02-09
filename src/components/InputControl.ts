@@ -46,6 +46,10 @@ class InputControl{
         return validationFn.prototype.constructor.name
     }
 
+    getValue(){
+        return this.#value
+    }
+
     setValue(value : string){
         this.#value = value
         this.validate()

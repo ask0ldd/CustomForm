@@ -8,8 +8,8 @@ import FormInputAlt from './components/FormInputAlt'
 function App() {
 
   const formGroup = useMemo(() =>  new FormGroup()
-    .addInputControl({accessor : "name", defaultValue : "", isRequired : false, validationFns : [lengthSupTen, lengthInfFifty]})
-    .addInputControl({accessor : "lastname", defaultValue : "", isRequired : false, validationFns : [lengthSupTen, lengthInfFifty]})
+    .addControl({accessor : "name", defaultValue : "", isRequired : false, validationFns : [lengthSupTen, lengthInfFifty]})
+    .addControl({accessor : "lastname", defaultValue : "", isRequired : false, validationFns : [lengthSupTen, lengthInfFifty]})
     .build(), []
   )
 
@@ -29,7 +29,8 @@ function App() {
           errorMessages={{lengthSupTen : 'error', lengthInfFifty : 'error2'}}
       />
       <FormInputAlt id="lastname" type={'text'} value={''} inputControl={formGroup.get('lastname')}/>
-      {formGroup.get('lastname').errors.includes('lengthSupTen') && <p id="lengthSupTenMessage">Should be at least 10 characters long.</p>}
+      {/*formGroup.get('lastname').errors.includes('lengthSupTen') && <p id="lengthSupTenMessage">Should be at least 10 characters long.</p>*/}
+      <p>Should at least : {formGroup.get('lastname').getValue()}</p>
       <input type='submit'/>
     </form>
   )

@@ -6,18 +6,18 @@ import InputControl from "./InputControl"
  */
 export class FormGroup {
 
-    #controls : IFormGroup = {}
+    controls : IFormGroup = {}
 
     /**
      * Constructs a new FormGroup.
      */
     constructor(){
-        this.#controls = {}
+        this.controls = {}
         return this
     }
 
     getControls(){
-        return {...this.#controls}
+        return {...this.controls}
     }
 
     /*addField(fieldArgs : {accessor : string, defaultValue : string, isRequired : boolean, validationFns : ValidatorFn | ValidatorFns | undefined}){
@@ -27,21 +27,21 @@ export class FormGroup {
         }
     }*/
 
-    addInputControl(fieldArgs : {accessor : string, defaultValue : string, isRequired : boolean, validationFns : ValidatorFn | ValidatorFns | undefined}){
+    addControl(fieldArgs : {accessor : string, defaultValue : string, isRequired : boolean, validationFns : ValidatorFn | ValidatorFns | undefined}){
         if (fieldArgs == null) return this
-        this.#controls = {...this.#controls,
+        this.controls = {...this.controls,
             [fieldArgs.accessor] : new InputControl(fieldArgs)
         }
         return this
     }
 
     get(accessor : string) : InputControl{
-        return this.#controls[accessor]
+        return this.controls[accessor]
     }
 
     validation(){
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        for (const [key, field] of Object.entries(this.#controls)) {
+        for (const [key, field] of Object.entries(this.controls)) {
             field.validate()
         }
     }
