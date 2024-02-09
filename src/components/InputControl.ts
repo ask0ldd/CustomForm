@@ -15,7 +15,7 @@ class InputControl{
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         let _validationsFns : ValidatorFns = [/*((_value: string) => true)*/]
         if(fieldArgs.validationFns != null) {
-            _validationsFns = Array.isArray(fieldArgs.validationFns) ? fieldArgs.validationFns : [fieldArgs.validationFns]
+            _validationsFns = Array.isArray(fieldArgs.validationFns) ? fieldArgs.validationFns : [fieldArgs.validationFns] // !!! should get rid of any anonymous functions
         }
         // check if accessor not "" and not already existant
         this.defaultValue = fieldArgs.defaultValue
@@ -31,7 +31,6 @@ class InputControl{
         this.errors = []
         this.validationFns.forEach(validationFn => {
             if(!validationFn(this.value)) {
-                // validationFnsfailed.add(key)
                 this.errors.push(this.#getValidationFnName(validationFn))
             }
         })

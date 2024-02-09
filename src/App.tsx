@@ -8,11 +8,16 @@ function App() {
   formGroup.addField({accessor : "name", defaultValue : "", isRequired : false, validationFns : [lengthSupTen, lengthInfFifty]}) // define error messages here
 
   return (
-    <form onSubmit={(e : React.FormEvent<HTMLFormElement>) => {
+    <form style={{display:'flex', flexDirection:'column', rowGap:'1rem', width:'800px'}} onSubmit={(e : React.FormEvent<HTMLFormElement>) => {
       e.preventDefault()
       formGroup.validation()
     }}>
-      <FormInput input={{id : "name", type : 'text', value : ''}} label={{id : "name-label", text : 'name'}} inputControl={formGroup.get("name")} errorMessages={{lengthSupTen : 'error', lengthInfFifty : 'error2'}}/>
+      <FormInput 
+          input={{id : "name", type : 'text', value : ''}} 
+          label={{id : "name-label", text : 'name'}} 
+          inputControl={formGroup.get("name")} 
+          errorMessages={{lengthSupTen : 'error', lengthInfFifty : 'error2'}}
+      />
       <input type='submit'/>
     </form>
   )
