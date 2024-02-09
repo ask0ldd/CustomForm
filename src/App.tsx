@@ -1,13 +1,21 @@
+import { useMemo, /*useState*/ } from 'react'
 import './App.css'
 import { FormGroup } from './components/FormGroup'
 import FormInput from './components/FormInput'
 import FormInputAlt from './components/FormInputAlt'
+// import useFormGroup from './hooks/useFormGroup'
 
 function App() {
 
-  const formGroup = new FormGroup()
-  formGroup.addInputControl({accessor : "name", defaultValue : "", isRequired : false, validationFns : [lengthSupTen, lengthInfFifty]}) // define error messages here
-  formGroup.addInputControl({accessor : "lastname", defaultValue : "", isRequired : false, validationFns : [lengthSupTen, lengthInfFifty]})
+  const formGroup = useMemo(() =>  new FormGroup()
+    .addInputControl({accessor : "name", defaultValue : "", isRequired : false, validationFns : [lengthSupTen, lengthInfFifty]})
+    .addInputControl({accessor : "lastname", defaultValue : "", isRequired : false, validationFns : [lengthSupTen, lengthInfFifty]})
+    .build(), []
+  )
+
+  // const formGroup = useFormGroup(initialFormGroup)
+
+  // const [_formGroup, setFormGroup] = useState<FormGroup>(initialFormGroup)
 
   return (
     <form style={{display:'flex', flexDirection:'column', rowGap:'1rem', width:'800px'}} onSubmit={(e : React.FormEvent<HTMLFormElement>) => {
