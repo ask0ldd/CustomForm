@@ -6,7 +6,7 @@ export default function FormInputAlt({id, type, placeholder, inputControl, value
 
     function setInputValue(value : string){
         _setInputValue(value)
-        inputControl.value = value
+        inputControl.setValue(value)
     }
 
     function handleChange(e : React.ChangeEvent<HTMLInputElement>){

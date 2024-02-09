@@ -12,7 +12,7 @@ export default function FormInput({input, label, inputControl, errorMessages} : 
               placeholder={input?.placeholder} className={input?.CSSClasses?.join(' ')} value={inputValue}
               onChange={(e) => {
                 setInputValue(e.target.value)
-                inputControl.value = e.target.value
+                inputControl.setValue(e.target.value)
                 inputControl.validate()
       }}/>
       {

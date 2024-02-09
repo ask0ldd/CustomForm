@@ -4,7 +4,7 @@ class InputControl{
 
     defaultValue : string = ""
     accessor : string = ""
-    value : string = ""
+    #value : string = ""
     errors : string[] = []
     validationFns : ValidatorFns | undefined = undefined
     isRequired : boolean = false
@@ -20,7 +20,7 @@ class InputControl{
         // check if accessor not "" and not already existant
         this.defaultValue = fieldArgs.defaultValue
         this.accessor = fieldArgs.accessor
-        this.value = fieldArgs.defaultValue || ''
+        this.#value = fieldArgs.defaultValue || ''
         this.errors = []
         this.validationFns = _validationsFns
         this.isRequired = fieldArgs.isRequired
@@ -29,17 +29,27 @@ class InputControl{
     validate(){
         if(this.validationFns == null) return true
         this.errors = []
+        // check if all validation functions can pass
         this.validationFns.forEach(validationFn => {
-            if(!validationFn(this.value)) {
-                this.errors.push(this.#getValidationFnName(validationFn))
+            if(!validationFn(this.#value)) {
+                this.errors.push(this.#getFunctionName(validationFn))
             }
         })
-
-        console.log(this.errors)
     }
 
-    #getValidationFnName(validationFn : ValidatorFn){
+    isError(){
+        if(this.errors.length>0) return true
+        return false
+    }
+
+    #getFunctionName(validationFn : ValidatorFn){
         return validationFn.prototype.constructor.name
+    }
+
+    setValue(value : string){
+        this.#value = value
+        this.validate()
+        console.log(this.errors)
     }
 }
 

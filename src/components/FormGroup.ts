@@ -20,7 +20,14 @@ export class FormGroup {
         return {...this.#state}
     }
 
-    addField(fieldArgs : {accessor : string, defaultValue : string, isRequired : boolean, validationFns : ValidatorFn | ValidatorFns | undefined}){
+    /*addField(fieldArgs : {accessor : string, defaultValue : string, isRequired : boolean, validationFns : ValidatorFn | ValidatorFns | undefined}){
+        if (fieldArgs == null) return this
+        this.#state = {...this.#state,
+            [fieldArgs.accessor] : new InputControl(fieldArgs)
+        }
+    }*/
+
+    addInputControl(fieldArgs : {accessor : string, defaultValue : string, isRequired : boolean, validationFns : ValidatorFn | ValidatorFns | undefined}){
         if (fieldArgs == null) return this
         this.#state = {...this.#state,
             [fieldArgs.accessor] : new InputControl(fieldArgs)
