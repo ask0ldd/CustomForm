@@ -12,7 +12,7 @@ function App() {
       e.preventDefault()
       formGroup.validation()
     }}>
-      <FormInput input={{id : "name", type : 'text', value : ''}} label={{id : "name-label", text : 'name'}} inputControl={formGroup.get("name")} errorMessages={[{validationFn : 'lengthSupTen', message : 'error'}, {validationFn : 'lengthInfFifty', message : 'error2'}]}/>
+      <FormInput input={{id : "name", type : 'text', value : ''}} label={{id : "name-label", text : 'name'}} inputControl={formGroup.get("name")} errorMessages={{lengthSupTen : 'error', lengthInfFifty : 'error2'}}/>
       <input type='submit'/>
     </form>
   )
