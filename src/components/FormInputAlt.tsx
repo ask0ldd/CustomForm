@@ -1,12 +1,13 @@
 import { useState } from "react"
-import InputControl from "./InputControl"
+// import InputControl from "./InputControl"
+import { IFormGroup } from "../hooks/useFormGroup"
 
-export default function FormInputAlt({id, type, placeholder, inputControl, value, style} : IInputAlt) {
+export default function FormInputAlt({id, type, placeholder, formGroup, value, style} : IInputAlt) {
     const [inputValue, _setInputValue] = useState(value)
 
     function setInputValue(value : string){
         _setInputValue(value)
-        inputControl.setValue(value)
+        formGroup.setControlValue({controlName : id, value : value})
     }
 
     function handleChange(e : React.ChangeEvent<HTMLInputElement>){
@@ -24,7 +25,7 @@ export default function FormInputAlt({id, type, placeholder, inputControl, value
 interface IInputAlt{
     id : string
     type : React.HTMLInputTypeAttribute
-    inputControl : InputControl
+    formGroup : IFormGroup
     placeholder? : string
     value? : string
     style? :  React.CSSProperties

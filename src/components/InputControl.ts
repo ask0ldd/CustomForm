@@ -46,7 +46,7 @@ class InputControl{
         return validationFn.prototype.constructor.name
     }
 
-    getValue(){
+   getValue(){
         return this.#value
     }
 
@@ -58,3 +58,24 @@ class InputControl{
 }
 
 export default InputControl
+
+/*
+class Boss {
+  callAgentMethod(agent: Agent) {
+    agent._setValue(); // Boss can call the _setValue method on Agent
+  }
+}
+
+class Agent {
+  private _setValue() {
+    // Method implementation
+  }
+}
+
+const boss = new Boss();
+const agent = new Agent();
+boss.callAgentMethod(agent); // This is allowed
+agent._setValue(); // This will result in a compilation error
+
+If you are not using TypeScript, you can follow the convention of using an underscore to indicate that the method should not be called from outside the class and document this restriction for other developers who may use your code.
+*/
