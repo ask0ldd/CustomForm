@@ -4,41 +4,45 @@ import InputControl from "../components/InputControl"
 
 function useFormGroup(){
 
-    /*const initialFormGroup = {
-        controls : {},  
-        getControls : function () { return this.controls },
-        addControl : function (fieldArgs : {accessor : string, defaultValue : string, isRequired : boolean, validationFns : ValidatorFn | ValidatorFns | undefined}) {
-            if (fieldArgs == null) return this
-            this.controls = {...this.controls,
-                [fieldArgs.accessor] : new InputControl(fieldArgs)
-            }
-            return this
-        },
-        
-    }*/
+    const [controls, setControls] = useState<IFormGroup>({})
 
-    const [controls, setControls] = useState({})
-
-    // const [formGroup, setFormGroup]= useState(initialFormGroup)
-
+    // replace accessor with controlName?
     function addControl(fieldArgs : {accessor : string, defaultValue : string, isRequired : boolean, validationFns : ValidatorFn | ValidatorFns | undefined}) {
-        if(controls[fieldArgs.accessor as keyof typeof controls]) throw new Error("A control with this name already exists.")
+        if(controls[fieldArgs.accessor]) throw new Error("A control with this name already exists.")
         setControls(prevControls => ({...prevControls, [fieldArgs.accessor] : new InputControl(fieldArgs)}))
     }
 
     function setControlValue({controlName, value} : {controlName : string, value : string}){
-        if(!controls[controlName as keyof typeof controls]) throw new Error("No control with that name.")
-        const targetControl : InputControl = controls[controlName as keyof typeof controls]
+        if(!controls[controlName]) throw new Error("No control with that name.")
+        const targetControl : InputControl = controls[controlName]
         targetControl.setValue(value)
         setControls(prevControls => ({...prevControls, [controlName] : targetControl}))
     }
 
-    function getControl(controlName : string){
-        if(controls[controlName as keyof typeof controls]) return controls[controlName as keyof typeof controls]
+    function getControl(controlName : string) : InputControl{
+        if(controls[controlName]) return controls[controlName]
         throw new Error("No control with that name.")
     }
 
-    return {getControl, setControlValue, addControl}
+    function validateAllControls(){
+        const newControls = {...controls}
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        for (const [_, control] of Object.entries(newControls)) {
+            control.validate()
+        }
+        setControls(newControls)
+    }
+
+    /*
+        const clone = Object.assign( {}, instanceOfBlah );
+        Object.setPrototypeOf( clone, Blah.prototype );
+    */
+
+    return {getControl, setControlValue, addControl, validateAllControls}
 }
 
 export default useFormGroup
+
+interface IFormGroup{
+    [key: string]: InputControl
+}
